@@ -1,19 +1,20 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.7
 import sys
 import time
 import datetime
 import smtplib
 import socket
 import urllib.request
+import dbus
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from systemd import journal
 
-MY_ADDRESS = '' #Username
-PASSWORD = '' #Password
-SMTPHost = 'smtp.office365.com' #SMTP Host i.e. for Outlook 365
+MY_ADDRESS = 'ENTER YOUR USERNAME / EMAIL ADDRESS HERE' #Username
+PASSWORD = 'ENTER YOUR PASSWORD HERE' #Password
+SMTPHost = 'ENTER YOUR SMTP HOST ADDRESS HERE' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
 def get_ip_address():
@@ -33,10 +34,20 @@ def main():
         s.starttls()
         s.login(MY_ADDRESS, PASSWORD)
     except:
-    	print("Unexpected error:", sys.exc_info()[0])
+    	print("Unexpected error during SMTP Connection:", sys.exc_info())
     	raise
-        #sys.exit(1)
-
+    # attempt to invoke start of ntp systemd service so that date/timestamp in email is correct
+    try:
+        sysbus = dbus.SystemBus()
+        systemd1 = sysbus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+        manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
+        job = manager.RestartUnit('ntp.service', 'fail')
+        # wait 20 seconds to allow sufficent time for restart of NTP service to occur and for correct system date
+        # to be set.
+        time.sleep(20)
+    except:
+        print("Unexpected error during NTP Service Restart:", sys.exc_info())
+        raise
     # create a MIMEMultipart message required for email
     msg = MIMEMultipart()
 
