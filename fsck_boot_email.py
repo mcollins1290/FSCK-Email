@@ -12,9 +12,9 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-MY_ADDRESS = 'ENTER YOUR USERNAME / EMAIL ADDRESS HERE' #Username
-PASSWORD = 'ENTER YOUR PASSWORD HERE' #Password
-SMTPHost = 'ENTER YOUR SMTP HOST ADDRESS HERE' #SMTP Host i.e. for Outlook 365
+MY_ADDRESS = 'mcollins1290@gmail.com' #Username
+PASSWORD = 'qwezxcbn1290' #Password
+SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
 def get_ip_address():
@@ -26,8 +26,9 @@ def get_ip_address():
 
 def main():
 
-    # wait for (X) secs to ensure wireless connection is UP after boot. This is neccessary for script to work via CRON
-    time.sleep(20)
+    # wait for (X) secs to ensure wireless connection is UP and date/time is set correctly after boot. 
+    # This is neccessary for script to work via CRON
+    time.sleep(60)
     # set up the SMTP server connection
     try:
         s = smtplib.SMTP(SMTPHost,SMTPPort)
@@ -36,18 +37,20 @@ def main():
     except:
     	print("Unexpected error during SMTP Connection:", sys.exc_info())
     	raise
-    # attempt to invoke start of ntp systemd service so that date/timestamp in email is correct
-    try:
-        sysbus = dbus.SystemBus()
-        systemd1 = sysbus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
-        manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
-        job = manager.RestartUnit('ntp.service', 'fail')
-        # wait 20 seconds to allow sufficent time for restart of NTP service to occur and for correct system date
-        # to be set.
-        time.sleep(20)
-    except:
-        print("Unexpected error during NTP Service Restart:", sys.exc_info())
-        raise
+    # attempt to invoke start of ntp systemd service so that date/timestamp in email is correct. This is an 
+    # alternate approach to just increasing the sleep() time above.
+#    try:
+#        sysbus = dbus.SystemBus()
+#        systemd1 = sysbus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+#        manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
+#        job = manager.RestartUnit('ntp.service', 'fail')
+#        # wait 20 seconds to allow sufficent time for restart of NTP service to occur and for correct system date
+#        # to be set.
+#        time.sleep(20)
+#    except:
+#        print("Unexpected error during NTP Service Restart:", sys.exc_info())
+#        raise
+
     # create a MIMEMultipart message required for email
     msg = MIMEMultipart()
 
