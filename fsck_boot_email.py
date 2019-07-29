@@ -12,8 +12,8 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-MY_ADDRESS = 'mcollins1290@gmail.com' #Username
-PASSWORD = 'qwezxcbn1290' #Password
+MY_ADDRESS = '' #Username
+PASSWORD = '' #Password
 SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
