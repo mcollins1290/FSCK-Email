@@ -12,8 +12,8 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-MY_ADDRESS = 'mcollins1290@gmail.com' #Username
-PASSWORD = 'qwezxcbn1290' #Password
+MY_ADDRESS = 'mc.emailnotifications@gmail.com' #Username
+PASSWORD = 'P!l@t707' #Password
 SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
@@ -28,7 +28,7 @@ def main():
 
     # wait for (X) secs to ensure wireless connection is UP and date/time is set correctly after boot. 
     # This is neccessary for script to work via CRON
-    time.sleep(60)
+    # time.sleep(90)
     # set up the SMTP server connection
     try:
         s = smtplib.SMTP(SMTPHost,SMTPPort)
@@ -76,7 +76,7 @@ def main():
 
     # setup the parameters of the email message
     msg['From']=MY_ADDRESS
-    msg['To']=MY_ADDRESS
+    msg['To']='mcollins1290@gmail.com'
     msg['Subject']="FSCK BOOT Results on " + datetime.datetime.now().strftime("%m-%d-%Y %H:%M") + " for host " + socket.gethostbyaddr(socket.gethostname())[0]
 
     # add to message the the message body string
