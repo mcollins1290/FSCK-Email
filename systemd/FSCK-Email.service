@@ -1,0 +1,11 @@
+[Unit]
+Description=FSCK Boot Email
+Requires=systemd-fsck@dev-md0.service
+After=systemd-fsck@dev-md0.service network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /root/Git/FSCK-Email/fsck_boot_email.py > /root/Git/FSCK-Email/Log/log 2>&1
+
+[Install]
+WantedBy=multi-user.target
