@@ -12,8 +12,9 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-MY_ADDRESS = 'mc.emailnotifications@gmail.com' #Username
-PASSWORD = 'P!l@t707' #Password
+FROM_ADDRESS = 'XYZ@gmail.com' #Gmail Username
+TO_ADDRESS = 'ABC@gmail.com' #To Address
+PASSWORD = '1234567890' #Gmail Password
 SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
@@ -33,7 +34,7 @@ def main():
     try:
         s = smtplib.SMTP(SMTPHost,SMTPPort)
         s.starttls()
-        s.login(MY_ADDRESS, PASSWORD)
+        s.login(FROM_ADDRESS, PASSWORD)
     except:
     	print("Unexpected error during SMTP Connection:", sys.exc_info())
     	raise
@@ -75,8 +76,8 @@ def main():
     #print(fsck_results_str)
 
     # setup the parameters of the email message
-    msg['From']=MY_ADDRESS
-    msg['To']='mcollins1290@gmail.com'
+    msg['From']=FROM_ADDRESS
+    msg['To']=TO_ADDRESS
     msg['Subject']="FSCK BOOT Results on " + datetime.datetime.now().strftime("%m-%d-%Y %H:%M") + " for host " + socket.gethostbyaddr(socket.gethostname())[0]
 
     # add to message the the message body string
