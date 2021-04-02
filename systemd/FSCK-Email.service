@@ -1,7 +1,7 @@
 [Unit]
 Description=FSCK Boot Email
-Requires=systemd-fsck@dev-md0.service
-After=systemd-fsck@dev-md0.service network-online.target
+Requires=systemd-fsck-root.service
+After=systemd-fsck-root.service network-online.target multi-user.target
 
 [Service]
 Type=oneshot
