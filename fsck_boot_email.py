@@ -12,10 +12,10 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-FROM_ADDRESS = 'mc.emailnotifications@gmail.com' #Username
-TO_ADDRESS = 'mcollins1290@gmail.com'
-PASSWORD = 'P!l@t707' #Password
-SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
+FROM_ADDRESS = '' #Username
+TO_ADDRESS = ''
+PASSWORD = '' #Password
+SMTPHost = '' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
 def get_ip_address():
