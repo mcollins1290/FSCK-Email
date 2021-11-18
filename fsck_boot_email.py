@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 import sys
 import time
 import datetime
@@ -12,9 +12,9 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-FROM_ADDRESS = 'XYZ@gmail.com' #Gmail Username
-TO_ADDRESS = 'ABC@gmail.com' #To Address
-PASSWORD = '1234567890' #Gmail Password
+FROM_ADDRESS = 'mc.emailnotifications@gmail.com' #Username
+TO_ADDRESS = 'mcollins1290@gmail.com'
+PASSWORD = 'P!l@t707' #Password
 SMTPHost = 'smtp.gmail.com' #SMTP Host i.e. for Outlook 365
 SMTPPort = 587 #SMTP Port
 
