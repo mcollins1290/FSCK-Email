@@ -5,7 +5,10 @@ After=systemd-fsck-root.service network-online.target multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /root/Git/FSCK-Email/fsck_boot_email.py > /root/Git/FSCK-Email/Log/log 2>&1
+EnvironmentFile=/etc/fsck-email.env
+ExecStart=/usr/bin/python3 /root/Git/FSCK-Email/fsck_boot_email.py
+StandardOutput=append:/root/Git/FSCK-Email/Log/log
+StandardError=inherit
 
 [Install]
 WantedBy=multi-user.target

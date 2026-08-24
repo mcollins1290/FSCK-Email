@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import os
 import time
 import datetime
 import smtplib
@@ -12,11 +13,27 @@ from email.mime.text import MIMEText
 
 from systemd import journal
 
-FROM_ADDRESS = '' #Username
-TO_ADDRESS = ''
-PASSWORD = '' #Password
-SMTPHost = '' #SMTP Host i.e. for Outlook 365
-SMTPPort = 587 #SMTP Port
+def get_email_settings():
+    required_variables = ('FSCK_EMAIL_FROM', 'FSCK_EMAIL_TO', 'FSCK_EMAIL_PASSWORD')
+    missing_variables = [name for name in required_variables if not os.environ.get(name)]
+    if missing_variables:
+        raise RuntimeError(
+            'Missing required environment variables: ' + ', '.join(missing_variables) +
+            '. See README.md for setup instructions.'
+        )
+
+    try:
+        smtp_port = int(os.environ.get('FSCK_EMAIL_SMTP_PORT', '587'))
+    except ValueError as error:
+        raise RuntimeError('FSCK_EMAIL_SMTP_PORT must be an integer') from error
+
+    return {
+        'from_address': os.environ['FSCK_EMAIL_FROM'],
+        'to_address': os.environ['FSCK_EMAIL_TO'],
+        'password': os.environ['FSCK_EMAIL_PASSWORD'],
+        'smtp_host': os.environ.get('FSCK_EMAIL_SMTP_HOST', 'smtp.gmail.com'),
+        'smtp_port': smtp_port,
+    }
 
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -27,14 +44,16 @@ def get_ip_address():
 
 def main():
 
+    email_settings = get_email_settings()
+
     # wait for (X) secs to ensure wireless connection is UP and date/time is set correctly after boot. 
     # This is neccessary for script to work via CRON
     # time.sleep(90)
     # set up the SMTP server connection
     try:
-        s = smtplib.SMTP(SMTPHost,SMTPPort)
+        s = smtplib.SMTP(email_settings['smtp_host'], email_settings['smtp_port'])
         s.starttls()
-        s.login(FROM_ADDRESS, PASSWORD)
+        s.login(email_settings['from_address'], email_settings['password'])
     except:
     	print("Unexpected error during SMTP Connection:", sys.exc_info())
     	raise
@@ -76,8 +95,8 @@ def main():
     #print(fsck_results_str)
 
     # setup the parameters of the email message
-    msg['From']=FROM_ADDRESS
-    msg['To']=TO_ADDRESS
+    msg['From']=email_settings['from_address']
+    msg['To']=email_settings['to_address']
     msg['Subject']="FSCK BOOT Results on " + datetime.datetime.now().strftime("%m-%d-%Y %H:%M") + " for host " + socket.gethostbyaddr(socket.gethostname())[0]
 
     # add to message the the message body string
