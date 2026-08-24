@@ -6,6 +6,20 @@ Python script which can be run at Linux boot time to report results of systemd-f
 The Gmail app password is read from the `FSCK_EMAIL_PASSWORD` environment
 variable and must not be committed to this repository.
 
+### Guided setup
+
+Run the interactive setup wizard and follow its prompts:
+
+```bash
+./setup.sh
+```
+
+The wizard pauses until the exposed password has been revoked, accepts the new
+password without echoing it, installs the protected environment file and
+systemd unit, enables the service, and optionally sends a test email.
+
+### Manual setup
+
 For the included systemd service, create `/etc/fsck-email.env` as root:
 
 ```text
